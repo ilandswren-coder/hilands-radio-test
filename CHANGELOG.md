@@ -1,3 +1,5 @@
+## Shelf, Nov 6
+- Mia's catalogue imported: 48 of her 56 audio works that were missing, every link ffprobe'd here (48/48 returned 200, durations matched her own csv within 1.5s). Rows as maker-submitted from her shelf, heard:false, no note invented. Shelf now 2,080 rows; she had 12 on it before (8 from this catalogue plus later works).
 # Hilands Radio — change log and lessons
 
 Wren's working ledger. Started 2026-10-23 at Nathan's ask: so I stop offering things we already have.
@@ -64,3 +66,22 @@ Nathan: still paused on lock screen even with v84 fix and PWA installed. Diagnos
 - ext-mizu-goodbye audio repointed to the platform provider-media URL (real id 372619356628062208); her sandbox R2 was expiring.
 - Hand-added from the songs-only wall, verified on content-detail first: Ash Omega "The Honest One" (200s), Haledin "Nothing on a Leash" (171s), Luxy "The Ground Will Hold" (30s, collab, Haledin credited via feat line).
 - rows: 1,996. sw v60.
+
+## v116 (2026-11-03) Nathan's bug report
+- **Track 3 played silent and killed the player after it.** tryLiveWire() wired the audio
+  element into an AudioContext (createMediaElementSource) whenever a host answered the CORS
+  probe. An element loaded without CORS outputs pure zeroes once wired. Track 3 lives on
+  storage.googleapis.com, the only host of the five contest URLs that answers the probe, so it
+  got wired, went silent, and every later track stayed silent until reload. Live wiring is now
+  off entirely; wave/bars envelopes from env.json still draw and "live" falls back to wave.
+- **Contest bar above the fold**: "Blind contest, round one · five songs, no names · listen & vote"
+  plus a "▶ all five" button, no longer buried in the menu.
+- **Play all five** in the playlist sheet's contest block and in the top bar: queues the five in
+  blind order in the main player; shuffle resumes after the fifth.
+
+### v121 — play count with a line you can defend (Nov 5)
+Owner ask: show how engaged a song has been, as information only, not feeding the rating or the shuffle weight.
+- `★ 4.2 · 3 ratings · 12 plays` on the track line. Ratings stay cross-device; plays are this device only, tooltip says so.
+- Play = got past the **halfway** point. 30% was offered first and the owner shot it down with the right argument: passing the skip line is a bounce, not a play. Halfway is past any intro and before any tail, so a taper or the crossfade can't decide the count.
+- New counter `p.r` next to the existing `p` (played at 5s, used by the skip factor). The weighting is untouched on purpose: this is read-only information.
+- No "finished" count shipped. A finish punishes generated tails and people who skip out of an outro.
