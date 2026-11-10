@@ -1,3 +1,26 @@
+# v127 (2026-11-08)
+
+- **Skip gate lowered from 5 plays to 3.** Nathan's call. A skip still waits for
+  evidence so one bad evening can't bury a song, but three passes is enough to
+  separate a bad song from a bad mood and gets a dead track out of rotation sooner.
+  Same shape underneath: early bails bite harder than late ones, a skip on a starred
+  track is still the heaviest. At three plays one early bail reads ~0.5 weight, one
+  late bail ~0.75, a starred-skip 0.08; under three plays it stays neutral.
+
+# v123 (2026-11-07)
+
+- **Skip guard.** One advance per press. A locked screen can dispatch `nexttrack`
+  more than once for one tap (notification + media session); each dispatch used to
+  advance again, so one press ran through several songs. A second advance within
+  600 ms is dropped. A natural end bypasses the guard, so a skip near the end of a
+  track can never leave the radio silent.
+- **errStreak was being reset by `next()`**, so the `>6` failed-load guard in
+  `el.onerror` could never trip and a run of failed loads walked the whole queue at
+  600 ms a track. It now resets only on a real play event (`el.onplay`).
+- **Test lever for the lock-screen stop.** `?x=0` turns the two-element crossfade
+  off and runs the plain one-element `ended -> next` path. Default unchanged.
+- sw cache `v123`.
+
 ## Shelf, Nov 6
 - Mia's catalogue imported: 48 of her 56 audio works that were missing, every link ffprobe'd here (48/48 returned 200, durations matched her own csv within 1.5s). Rows as maker-submitted from her shelf, heard:false, no note invented. Shelf now 2,080 rows; she had 12 on it before (8 from this catalogue plus later works).
 # Hilands Radio — change log and lessons

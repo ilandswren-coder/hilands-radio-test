@@ -174,6 +174,8 @@
   .psheet{width:100%;max-width:430px;height:100%;max-height:100%;display:flex;flex-direction:column;background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden}
   .pshead{display:flex;justify-content:space-between;align-items:center;padding:11px 14px;background:var(--panel);border-bottom:1px solid var(--line);position:relative;z-index:2;box-shadow:0 4px 14px rgba(0,0,0,.18);border-radius:16px 16px 0 0}
   .pshead strong{font-size:16px;font-weight:650}
+  .psbtn-ico{width:32px;min-width:32px;height:32px;padding:0}
+  .psvg{width:17px;height:17px;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
   .psbtn{width:auto;min-width:30px;height:30px;border-radius:999px;border:1.5px solid var(--pill);background:var(--panel);color:var(--btn);font-size:13px;line-height:1;padding:0 9px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:3px;flex:0 0 auto}
   .pslabel{font-size:10.5px;font-weight:600;letter-spacing:.3px;transform:translateY(.5px)}
   .pslist{flex:6 1 0;min-height:0;overflow-y:auto;padding:12px 14px}
@@ -217,6 +219,7 @@
   .stats{color:var(--dim);font-size:12px;text-align:center;margin-top:16px;line-height:1.6;max-width:400px}
   .gline{color:var(--count);font-size:11.5px;text-align:center;margin-top:2px;min-height:15px}
   footer{color:var(--dim);font-size:12px;text-align:center;margin-top:150px;line-height:1.6;max-width:400px}
+.excbadge{display:inline-block;margin-left:8px;padding:1px 6px;border:1px solid var(--dim2);border-radius:9px;font-size:11px;letter-spacing:.03em;color:var(--dim2);vertical-align:2px}
 .makernote{font-size:12.5px;line-height:1.45;margin:7px auto 0;color:var(--dim2);max-width:330px;text-align:left}
 .featline{font-size:12px;margin-top:3px;color:var(--dim2)}.featlink{color:var(--link-feat);text-decoration:none}.featlink:hover{text-decoration:underline}.featwho{color:var(--dim2)}
 </style>
@@ -239,6 +242,7 @@
   <button class="menurow" id="welcomebtn" style="margin-bottom:8px">About This App</button>
   <div class="menulabel">Saved Playlist <span class="pcount" id="plcount"></span></div>
   <button class="menurow" id="listbtn">Your Playlist/Search</button>
+  <button class="menurow" id="histbtn" style="margin-top:4px">History <span style="opacity:.55;font-size:11.5px;letter-spacing:.2px">last 10</span></button>
   <div class="menulabel" style="margin-top:14px">Unsorted</div>
   <button class="lane unso" id="unso">Include Unsorted Audio</button>
   <div class="menulabel" style="margin-top:14px">Theme</div>
@@ -329,16 +333,23 @@
 <div class="delwrap" id="delwrap"><div class="delbox"><h3>DELETE</h3><p>Remove this track from your saved playlist? Are you sure?</p><div class="row"><button class="yes" id="delyes">DELETE</button><button class="no" id="delno">Keep</button></div></div></div>
 <div class="sheet" id="artsheet">
   <div class="psheet">
-    <div class="pshead"><strong id="arthead">More from this maker</strong><button class="psbtn" id="arplayall" title="play all" aria-label="play all by this maker">▶</button><button class="psbtn" id="arclose" title="close" aria-label="close">✕</button></div>
+    <div class="pshead"><strong id="arthead">More from this maker</strong><button class="psbtn psbtn-ico" id="arshuffle" title="shuffle everything by this maker" aria-label="shuffle everything by this maker"><svg class="psvg" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6.5h2.6c1.4 0 2.2.6 3 1.7l5 7c.8 1.1 1.6 1.7 3 1.7H20"/><path d="M3 17.5h2.6c1.4 0 2.2-.6 3-1.7l1.5-2.1"/><path d="M16.6 3.6 20 6.9l-3.4 3.3"/><path d="M16.6 13.5 20 16.8l-3.4 3.3"/></svg></button><button class="psbtn" id="arplayall" title="play all" aria-label="play all by this maker">▶</button><button class="psbtn" id="arclose" title="close" aria-label="close">✕</button></div>
     <div class="pslist" id="artbody"></div>
     <div style="padding:10px 14px;border-top:1px solid var(--line)"><div class="sheetfoot" style="margin-top:0">Tap a track to play it now.</div></div>
+  </div>
+</div>
+<div class="sheet" id="histsheet">
+  <div class="psheet">
+    <div class="pshead"><strong>History</strong><button class="psbtn" id="histclose" title="close" aria-label="close">✕</button></div>
+    <div class="pslist" id="histbody"></div>
+    <div style="padding:10px 14px;border-top:1px solid var(--line)"><div class="sheetfoot" style="margin-top:0">The last 10 tracks this device started. It stays on the device, like stars and plays.</div></div>
   </div>
 </div>
 <div class="sheet" id="addsheet">
   <div class="psheet">
     <div class="pshead"><strong>Add a track</strong><button class="sheetclose" id="addclose">close</button></div>
     <div class="pslist" style="padding:14px 16px;font-size:14px;line-height:1.5">
-      <p style="margin:0 0 10px;color:var(--dim)">For makers whose song isn't in the station yet. I read every add and fetch the track in myself.</p>
+      <p style="margin:0 0 10px;color:var(--dim)">For makers whose song isn't in the station yet. This lands in a sheet I read in batches, not the moment you send it. If it's not on the shelf in a few days, write <b>wren-807@ilands.app</b> &mdash; that route reaches me directly.</p>
       <input id="addtitle" type="text" placeholder="track title" style="width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:var(--panel);color:var(--ink);font-size:14px;margin-bottom:8px">
       <input id="addmaker" type="text" placeholder="your name on iLands" style="width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:var(--panel);color:var(--ink);font-size:14px;margin-bottom:8px">
       <input id="addmedia" type="text" placeholder="mp3 link, or an iLands post address — the song doesn't have to be an MP3 on its own (optional but helps)" style="width:100%;box-sizing:border-box;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:var(--panel);color:var(--ink);font-size:14px;margin-bottom:8px">
@@ -348,7 +359,7 @@
         <option value="voice/sounds">voice / sounds &mdash; spoken word, poetry, readings</option>
       </select>
       <button class="fix" id="addsend" style="width:100%">Send it to Wren</button>
-      <div class="sheetfoot" id="addfoot">Lands in my add sheet, no email in the path.</div>
+      <div class="sheetfoot" id="addfoot">Lands in my add sheet, read in batches.</div>
     </div>
   </div>
 </div>
@@ -384,9 +395,11 @@ document.addEventListener("visibilitychange", ()=>{ if(document.visibilityState=
 // v100-test: notification pause while locked does not auto-resume (Nathan's bug #2).
 // When the page returns to the front, or the network comes back, playback restarts
 // if the pause was not the listener's intent. Fallback for a paused session too.
-document.addEventListener("visibilitychange", ()=>{ if(document.visibilityState==="visible" && wantPlay && audio.paused && !userPause){ setTimeout(()=>{ if(wantPlay && audio.paused && !userPause){ attemptPlay(); setResume(false); } }, 800); } });
+// v131: coming back to the front no longer grabs the audio back. A visible page that
+// paused is a mic session or a focus grab; the resume button is the way in.
+document.addEventListener("visibilitychange", ()=>{ if(document.visibilityState==="visible" && wantPlay && audio.paused && !userPause){ setResume(true); } });
 window.addEventListener("online", ()=>{ if(wantPlay && audio.paused && !userPause){ setTimeout(attemptPlay, 600); } });
-const UPDATED = "2026-11-05 v122";      // page version: only moves when behavior changes. v113-test merged from testrepo; main carries its own stamp, no -test suffix
+const UPDATED = "2026-11-08 v131";      // page version: only moves when behavior changes. v113-test merged from testrepo; main carries its own stamp, no -test suffix
 const DATA_UPDATED = "track list updated 2026-11-05"; // v100-test: data label is separate from the page version — adds never bump the version
 const LS = "hilands_radio_stars_v1", LSS = "hilands_radio_saved_v1", LSK = "hilands_radio_kindfix_v1", LSL = "hilands_radio_lane_v1", LSU = "hilands_radio_unsorted_v1", LSV = "hilands_radio_votes_v1", LSP = "hilands_radio_plays_v1", LSPM = "hilands_radio_plmode_v1", PSORT_KEY = "hilands_radio_plsort_v1",
       LSG = "hilands_radio_global_v1", LSMIG = "hilands_radio_migrated_v3", LDUR = "hilands_radio_dursave_v1";
@@ -402,7 +415,7 @@ const A2=document.getElementById("audio2"), elMaker=document.getElementById("mak
       elStars=document.getElementById("stars"), elStats=document.getElementById("stats"), elKind=document.getElementById("kind"),
       elSave=document.getElementById("save"), elFix=document.getElementById("fix"), elFixlbl=document.getElementById("fixlbl");
 const CONTENT="https://ilands.ai/content/", AGENT="https://ilands.ai/agent/";
-const TLINK=t=>t.contentId?CONTENT+t.contentId:(/^\d+$/.test(t.id)?CONTENT+t.id:AGENT+t.agent); // ext ids have no content page; point at the artist
+const TLINK=t=>t.door?t.door:(t.contentId?CONTENT+t.contentId:(/^\d+$/.test(t.id)?CONTENT+t.id:AGENT+t.agent)); // ext ids have no content page; point at the artist
 function votesOf(t){ return votes[t.id] || {s:0,m:0}; }
 function reports(t){ const v=votesOf(t); return v.s + v.m; }
 function fracSpeech(t){ const v=votesOf(t), n=v.s+v.m; return n ? v.s/n : 0; }
@@ -433,15 +446,27 @@ function weight(t){ const s=stars[t.id]||0; let w = s===0?1:(s===1?0.35:(s===2?1
   w *= skipFactor(t);
   return Math.max(w, 0.002); }
 // v120: the skip penalty waits for evidence, then reads the SHAPE of the bail.
-// One skip in one play cannot tell a bad song from a bad evening. Five plays means the
-// track walked through the gate five times. And where they left matters more than how
-// often: bailing on the opening is a verdict on the song, bailing late in the window is
-// mostly a verdict on the listener's patience.
+// One skip in one play cannot tell a bad song from a bad evening. v127: three plays, not
+// five, was the owner's call: still enough passes to separate a bad song from a bad
+// evening, and it gets a track out of rotation sooner. Where they left matters more than
+// how often: bailing on the opening is a verdict on the song, bailing late in the window
+// is mostly a verdict on the listener's patience.
 function skipFactor(t){
   const pl=playsOf(t), P=pl.p||0, S=pl.s||0;
-  if(P<5 || !S) return 1;                        // not enough passes yet: stay neutral
+  if(P<3 || !S) return 1;                        // v127: gate lowered from 5 to 3 (owner call)
   const e=Math.min(1,S/P);                       // share of plays left before the window closed
-  if(pl.x && stars[t.id]>0) return 0.08;         // walked out on a song you starred: heaviest
+  // v128: a starred-skip no longer flattens every song the same way. A 3-star you walked out
+  // of once can be a mood; a 1-star you walked out of is a verdict. Base is the worst case at
+  // total walkout, and the rate of walkouts moves you toward it (one bail in three plays is a
+  // third of the way there). Owner's frame: 3 stars + skip = very little, 1 and 2 = far apart.
+  const st = stars[t.id]||0;
+  if(pl.x && st>0){
+    const base = st===1?0.10:(st===2?0.40:0.85);
+    const r = Math.min(1, (pl.x||0)/P);
+    let f = 1-(1-base)*r;
+    if(!isFinite(f)) f=1;
+    return Math.max(0.02, Math.min(1, f));
+  }
   let f=1-1.5*e;
   const d=effDur(t)||0, win=d*0.3;               // the opening window is the first 30% of the song
   let sum=0, n=0;
@@ -452,6 +477,28 @@ function skipFactor(t){
   return Math.max(0.02, Math.min(1, f)); }
 function savePlays(){ localStorage.setItem(LSP,JSON.stringify(plays)); }
 function logPlay(t){ if(!t) return; const p = plays[t.id] || {p:0,s:0,f:0}; p.p++; plays[t.id]=p; savePlays(); }
+/* v125: history. The last ten tracks this device actually started, newest first.
+   Device-only, like stars and plays: nothing here leaves the phone. A resume is not
+   a new entry, so a track you left paused all night appears once, not forty times. */
+const LSH = "hilands_radio_history_v1";
+let hist = load(LSH,"[]"); if(!Array.isArray(hist)) hist=[];
+function saveHist(){ try{ localStorage.setItem(LSH, JSON.stringify(hist)); }catch(e){} }
+function logHist(t){ if(!t) return;
+  if(hist.length && hist[0].id===String(t.id)) return;
+  hist.unshift({id:String(t.id), at:Date.now()});
+  hist=hist.slice(0,10); saveHist(); }
+function renderHist(){
+  const body=document.getElementById("histbody"); if(!body) return;
+  const rows=hist.map(h=>TRACKS.find(x=>String(x.id)===h.id)).filter(Boolean);
+  if(!rows.length){ body.innerHTML='<p class="pempty">Nothing played on this device yet. History starts once a track is going.</p>'; return; }
+  body.innerHTML=rows.map(t=>{
+    const cur=queue[idx]&&String(queue[idx].id)===String(t.id);
+    return '<div class="frow'+(cur?' fcur':'')+'" data-id="'+t.id+'">'
+      +'<div class="ftl">'+(cur?'\u25B8 ':'')+escapeHtml(t.title||"(untitled)")+'</div>'
+      +'<div class="fmk">'+escapeHtml(t.maker||"")+'</div></div>';
+  }).join('');
+  body.querySelectorAll(".frow").forEach(r=>{ r.onclick=()=>{ playId(r.dataset.id); refreshRows(); }; });
+}
 // one skip per play, and a skip only counts once you've actually heard something.
 // a rapid double-tap on a freshly loaded track must not bury it.
 let skippedThisPlay=false, enteredAt=0, playCounted=false, reachedCounted=false, recentLeft={};
@@ -480,7 +527,7 @@ function show(){
     +escapeHtml(t.maker||"unknown")+'</a>'+(t.handle?('<span class="handle">('+escapeHtml(t.handle)+')</span>'):'')+'<button class="morebtn" data-agent="'+(t.agent||'')+'" data-handle="'+(t.handle||'')+'">more</button>';
   { const mb=elMaker.querySelector(".morebtn"); if(mb) mb.onclick=()=>openArtist(t); }
   elTitle.innerHTML='<span class="lbl">song</span><a class="songtitle" href="'+TLINK(t)+'" target="_blank" rel="noopener" title="open this exact song"><span class="go">\u25B8</span>'
-    +escapeHtml(t.title||"(untitled)")+'</a>'+(t.feat&&t.feat.length?('<div class="featline" title="named in the track description"><span class="lbl">credits</span> '+t.feat.map(f=>f.a?('<a class="featlink" href="'+AGENT+f.a+'" target="_blank" rel="noopener" title="everything by @'+escapeHtml(f.h)+'">@'+escapeHtml(f.h)+'</a>'):('<span class="featwho">@'+escapeHtml(f.h)+'</span>')).join(' &middot; ')+'</div>'):'')+(t.note?('<div class="makernote">'+escapeHtml(t.note)+'</div>'):'');   // v122: maker's own line about the song, printed unedited
+    +escapeHtml(t.title||"(untitled)")+'</a>'+(t.excerpt?('<span class="excbadge" title="a 30-second excerpt, not the full track">30s excerpt</span>'):'')+(t.feat&&t.feat.length?('<div class="featline" title="named in the track description"><span class="lbl">credits</span> '+t.feat.map(f=>f.a?('<a class="featlink" href="'+AGENT+f.a+'" target="_blank" rel="noopener" title="everything by @'+escapeHtml(f.h)+'">@'+escapeHtml(f.h)+'</a>'):('<span class="featwho">@'+escapeHtml(f.h)+'</span>')).join(' &middot; ')+'</div>'):'')+(t.note?('<div class="makernote">'+escapeHtml(t.note)+'</div>'):'');   // v122: maker's own line about the song, printed unedited
   setMedia(t);
   const _n=reports(t), _f=Math.round(fracSpeech(t)*100);
   elKind.textContent = _n ? kindOf(t)+(kindOf(t)==="spoken"?" "+_f+"%":" "+_f+"% not music") : kindOf(t);
@@ -540,7 +587,7 @@ function setMedia(t){
     nexttrack: ()=>{
       logSkip();
       const i=peekNext(); if(!queue[i]) return;
-      if(!armed){ armBuffered(); }
+      if(CROSSFADE && !armed){ armBuffered(); }
       if(armed && armed.i===i && !armed.started){
         startArmed();
         if(armed && armed.started){ finishSwap(); errStreak=0; return; }
@@ -577,7 +624,9 @@ function armGestureRecovery(){ if(gestureArmed) return; gestureArmed=true;
   const tryit=()=>{ if(wantPlay && audio.paused && !userPause){ gestureArmed=false; attemptPlay(); } else gestureArmed=false; };
   document.addEventListener("click", tryit, {once:true});
   document.addEventListener("touchstart", tryit, {once:true});
-  document.addEventListener("visibilitychange", ()=>{ if(!document.hidden && wantPlay && audio.paused && !userPause) attemptPlay(); });
+  // v131: a refusal on a hidden page retries when we're hidden again; on a visible
+  // page it hands back the resume button instead of grabbing the mic session.
+  document.addEventListener("visibilitychange", ()=>{ if(document.hidden){ if(wantPlay && audio.paused && !userPause) attemptPlay(); } else { gestureArmed=false; if(wantPlay && audio.paused && !userPause) setResume(true); } });
 }
 // v66 volume normalize: env.json's raw bars carry real loudness. Per track, a gain
 // factor lifts quiet masters and eases loud ones toward one target, so the shuffle
@@ -606,7 +655,7 @@ function playCurrent(){
     delete recentLeft[t.id]; grace=true;
   }
   playCounted=grace; reachedCounted=false; skippedThisPlay=false; enteredAt=Date.now();
-  wantPlay=true; userPause=false; setResume(false); setNote("");
+  wantPlay=true; userPause=false; setResume(false); setNote(""); clearAf();
   if(typeof armed!=="undefined" && armed){ try{ armed.el.pause(); }catch(e){} armed=null; }
   try{ setVol(audio,1,t); }catch(e){}
   audio.src=t.audio; try{ audio.load(); }catch(e){}
@@ -629,8 +678,15 @@ function nextIx(fwd){
   if(fwd){ const i=idx+1; return i>=queue.length?0:i; }
   return idx>0?idx-1:0;
 }
-function next(fwd=true){
-  errStreak=0;
+function next(fwd=true, force=false){
+  // v123: one advance per press. A locked screen can dispatch nexttrack more than
+  // once for a single tap (notification + media session), and each dispatch used to
+  // advance again, so one press ran through several songs. errStreak is no longer
+  // zeroed here: it is reset on a real play event (el.onplay), so a run of failed
+  // loads now stops at the guard in el.onerror instead of walking the whole queue.
+  const nowAdv=Date.now();
+  if(!force && nowAdv-lastAdvance<600) return;
+  lastAdvance=nowAdv;
   const cur=queue[idx];
   if(cur) recentLeft[cur.id]={at:Date.now(), s:skippedThisPlay};
   if(fwd){ idx++; if(idx>=queue.length){ queue=keyed(); idx=0; } } else { if(idx>0) idx--; else { queue=keyed(); idx=0; } }
@@ -643,7 +699,7 @@ elPlay.onclick=()=>{
     if(audio.currentSrc && audio.currentTime>0 && !audio.ended){
       wantPlay=true; setResume(false); setNote(""); attemptPlay();
     } else { playCurrent(); }
-  } else { wantPlay=false; userPause=true; audio.pause(); if(envRaf){ cancelAnimationFrame(envRaf); envRaf=0; } if(armed) try{ armed.el.pause(); }catch(e){} }
+  } else { wantPlay=false; userPause=true; clearAf(); audio.pause(); if(envRaf){ cancelAnimationFrame(envRaf); envRaf=0; } if(armed) try{ armed.el.pause(); }catch(e){} }
 };
 document.getElementById("next").onclick=()=>{ logSkip(); next(true); };
 document.getElementById("prev").onclick=()=>next(false);
@@ -656,6 +712,11 @@ document.getElementById("resume").onclick=()=>{ setResume(false); attemptPlay();
 // two are crossfaded. If the page gets no tick near the boundary at all, the
 // plain ended -> next() path still runs as the fallback.
 let armed=null, FADE=3.0, lastSwap=0; // v79: self-heal stays clear of the boundary for 10s after a swap
+// v123 test lever: the two-element crossfade is the suspected cause of the lock-screen
+// runaway. Append ?x=0 to the page address to turn the handoff off and run the plain
+// one-element ended->next path. Nothing changes unless that is in the URL.
+let CROSSFADE = !/[?&]x=0(&|$)/.test(location.search);
+let lastAdvance = 0;
 function peekNext(){ return nextIx(true); }
 function armBuffered(){
   if(armed || !wantPlay) return;
@@ -728,17 +789,55 @@ function rebuildAudioSession(){
     audio = fresh;
   }catch(e){}
 }
+/* v125: audio focus, the voice-assistant case. Google Assistant / voice-to-text takes
+   the output away and the element pauses. That part is correct. What came after was not:
+   the retry path restarted the song while the mic session was still open. Two causes.
+   (a) A buffered-but-unstarted handoff element could still be sitting there, so a
+       restart played two sources at once. That is the stutter.
+   (b) The two fixed retries at 700ms and 2500ms land squarely inside a dictation session.
+   Now: an unprompted pause drops any unstarted handoff, a second element is never left
+   playing, and recovery uses a widening backoff (0.9s, 3s, 8s) that gives up instead of
+   hammering. ?af=0 restores the old two-retry shape for comparison. */
+const AF_ON = !/[?&]af=0(&|$)/.test(location.search);
+const AF_WAITS=[900,3000,8000];
+let afRetry=0, afLevel=0;
+function clearAf(){ if(afRetry){ clearTimeout(afRetry); afRetry=0; } afLevel=0; }
+function pauseOther(keep){ const o=(keep===audio)?A2:audio; try{ if(o && !o.paused) o.pause(); }catch(e){} }
+function scheduleAfRetry(){
+  if(!AF_ON || afRetry || afLevel>=AF_WAITS.length) return;
+  const wait=AF_WAITS[afLevel++];
+  afRetry=setTimeout(()=>{ afRetry=0;
+    if(!wantPlay || userPause || !audio.paused) return;
+    if(Date.now()-lastSwap<=10000) return;            // a track change is not a focus loss
+    if(armed && armed.started) return;                // mid-handoff: finishSwap owns this
+    pauseOther(audio);
+    attemptPlay();
+    scheduleAfRetry();
+  }, wait);
+}
 function wire(el){
   const mine=()=>el===audio;
   const dropArmed=()=>{ if(armed && armed.el===el && !armed.started) armed=null; };
   el.addEventListener("play",()=>{ if(!mine()) return; const t=queue[idx]; if(t) document.title=(t.title||"Hilands Radio")+" \u00b7 "+((t.maker)||"")+" \u2014 Hilands Radio"; });
-  el.onplay=()=>{ if(!mine()) return; errStreak=0; lastTick=Date.now(); setIcon(true); setResume(false); ms("playbackState","playing"); setPos(); tryLiveWire(el); if(!envRaf&&wantPlay&&!el.paused) envRaf=requestAnimationFrame(drawViz); };
+  el.onplay=()=>{ if(!mine()) return; clearAf(); logHist(queue[idx]); errStreak=0; lastTick=Date.now(); setIcon(true); setResume(false); ms("playbackState","playing"); setPos(); tryLiveWire(el); if(!envRaf&&wantPlay&&!el.paused) envRaf=requestAnimationFrame(drawViz); };
   el.onpause=()=>{ if(!mine()) return; setIcon(false); ms("playbackState","paused");
     // v76: a pause nobody asked for (buffer underrun, OS audio focus, backgrounded
-    // play() drop) is retried, twice, so the radio self-heals instead of sitting silent.
+    // play() drop) is retried, so the radio self-heals instead of sitting silent.
+    // v125: see the AF_ON block above. The retry widens now, and a stale handoff is dropped.
     if(wantPlay && !userPause && !el.ended && Date.now()-lastSwap>10000){
-      setTimeout(()=>{ if(wantPlay && el.paused && !userPause && Date.now()-lastSwap>10000) attemptPlay(); }, 700);
-      setTimeout(()=>{ if(wantPlay && el.paused && !userPause && Date.now()-lastSwap>10000) attemptPlay(); }, 2500);
+      if(armed && !armed.started) armed=null;
+      if(AF_ON){
+        if(!(armed && armed.started)) pauseOther(el);
+        // v129: a visible page that paused itself is a dictation session or a focus grab.
+        // Every timer we tried (700ms, 900ms, 4s) lands inside the mic and steals it back.
+        // So: while the listener can SEE the page, we don't grab. The tap target is there.
+        // Hidden (lock screen) keeps the widening retry, which is the case that was dying.
+        if(document.hidden) scheduleAfRetry(); else setResume(true);
+      }
+      else {
+        setTimeout(()=>{ if(wantPlay && el.paused && !userPause && Date.now()-lastSwap>10000) attemptPlay(); }, 700);
+        setTimeout(()=>{ if(wantPlay && el.paused && !userPause && Date.now()-lastSwap>10000) attemptPlay(); }, 2500);
+      }
     }
   };
   el.onended=()=>{ if(!mine()) return;
@@ -747,7 +846,7 @@ function wire(el){
     // v83: if the crossfade handoff was refused, swap the src into the playing
     // element instead of falling back to a refused play().
     if(armed && (!armed.started || armed.refused)){ sameElSwap(armed.i); }
-    else if(!finishSwap()) next(true);
+    else if(!finishSwap()) next(true,true); // a natural end is never swallowed by the press guard
     // v86: the v78 retry timers fired after EVERY track change, healthy handoff
     // included, and could stomp a working crossfade into a pause. Removed. The
     // pre-end arm + crossfade is the path that survived lock screens since v21.
@@ -768,7 +867,7 @@ function wire(el){
     if(Date.now()-posTick>4000){ posTick=Date.now(); setPos(); }
     if(wantPlay && isFinite(audio.duration) && audio.duration>0){
       const rem=audio.duration-audio.currentTime;
-      if(!armed && rem<=8 && rem>0.6) armBuffered();
+      if(CROSSFADE && !armed && rem<=8 && rem>0.6) armBuffered();
       if(armed && !armed.started && rem<=FADE && rem>0.2) startArmed();
       // v86: the v85 boundary swap removed. On a throttled, screen-off page the
       // last timeupdate lands well before the boundary, so the swap fired too
@@ -786,15 +885,22 @@ function wire(el){
 let posTick=0;
 wire(audio); wire(A2);
 setInterval(()=>{ if(wantPlay && !audio.paused && Date.now()-lastTick>15000){ lastTick=Date.now(); attemptPlay(); } // v76: no load(), it restarts the track
-  if(wantPlay && audio.paused && !userPause && Date.now()-lastSwap>10000 && Date.now()-lastTick>7000){ // v78 heal, v79: not within 10s of a swap
+  // v131: the v78 healer ran every 5s on a VISIBLE page too. During a dictation or
+  // assistant session that grabbed the audio back every 5 seconds, which is the
+  // stutter (music quiets, tries to come back, gets cut, repeats). Heal a hidden
+  // page only. Visible means: the resume button is the only way back in.
+  if(document.hidden && wantPlay && audio.paused && !userPause && Date.now()-lastSwap>10000 && Date.now()-lastTick>7000){ // v78 heal, v79: not within 10s of a swap
     lastTick=Date.now();
     if(audio.currentSrc && audio.currentTime>0 && !audio.ended) attemptPlay(); else playCurrent();
   }
 },5000);
-document.addEventListener("visibilitychange",()=>{ if(!document.hidden&&wantPlay&&audio.paused) attemptPlay(); });
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden&&wantPlay&&audio.paused&&!userPause) setResume(true); });
 elStars.querySelectorAll(".star").forEach(s=>{ s.onclick=()=>{ const t=queue[idx]; if(!t) return; const v=+s.dataset.v;
-  stars[t.id]=(stars[t.id]===v)?0:v; localStorage.setItem(LS,JSON.stringify(stars));
-  if(stars[t.id]>0) queueStar(t, stars[t.id], false);   // the tap also lands in the shared stars tab
+  const _was=stars[t.id]||0;
+  stars[t.id]=(_was===v)?0:v; localStorage.setItem(LS,JSON.stringify(stars));
+  // v126: a zero is a withdrawal, not a non-event. If it never reaches the tab, the
+  // old row stands and the star you took back keeps counting for everyone else.
+  if(stars[t.id]>0 || _was>0) queueStar(t, stars[t.id], false);   // the tap also lands in the shared stars tab
   show(); updateStats(); }; });
 elSave.onclick=()=>{ const t=queue[idx]; if(!t) return; const i=saved.indexOf(t.id);
   if(i>=0) saved.splice(i,1); else saved.unshift(t.id);
@@ -808,6 +914,8 @@ function menuSet(on){ MENU.classList.toggle("open",on); MBTN.classList.toggle("o
 MBTN.onclick=(e)=>{ e.stopPropagation(); menuSet(!MENU.classList.contains("open")); };
 document.addEventListener("click",e=>{ if(MENU.classList.contains("open") && !MENU.contains(e.target) && e.target!==MBTN && !MBTN.contains(e.target)) menuSet(false); });
 document.getElementById("listbtn").onclick=()=>{ menuSet(false); openSheet(); };
+document.getElementById("histbtn").onclick=()=>{ menuSet(false); renderHist(); document.getElementById("histsheet").classList.add("open"); };
+document.getElementById("histclose").onclick=()=>document.getElementById("histsheet").classList.remove("open");
 // v73 backup/restore: stars + saved list download as one small JSON file, so a
 // site-data wipe (uninstall, clear & reset) stops taking his taste with it.
 document.getElementById("bkbackup").onclick=()=>{
@@ -895,7 +1003,7 @@ document.getElementById("addsend").onclick=()=>{
   // If the link is an iLands content URL, keep the id so the row ties back to the post it came from.
   const m=media.match(/content\/(\d+)/);
   queueAdd({title:title, maker:maker, lane:lane, contentId:m?m[1]:"", mediaUrl:media, device:DEV});
-  foot.textContent="Sent. Thank you \u2014 I'll read it and fetch the track in.";
+  foot.textContent="Sent to the sheet. I read it in batches \u2014 if it's not on the shelf in a few days, write wren-807@ilands.app.";
   document.getElementById("addtitle").value=""; document.getElementById("addmaker").value=""; document.getElementById("addmedia").value=""; document.getElementById("addlane").value="";
 };
 window.addEventListener("online",flushAdds);
@@ -930,9 +1038,11 @@ function readGlobals(){
     starsReady=true;   // the stars script is live: writes may go out
     // latest row per device+track, then average across devices
     const per={};
-    for(const r of j.rows){ if(!r.track || !r.stars) continue; per[r.device+"\n"+r.track]={track:r.track, stars:r.stars, when:r.when}; }
+    // v126: keep zero rows in the fold. A device that withdrew a star has to be able
+    // to take it back, so the row is read, then dropped from the average below.
+    for(const r of j.rows){ const v=+r.stars; if(!r.track || !isFinite(v)) continue; per[r.device+"\n"+r.track]={track:r.track, stars:v, when:r.when}; }
     const agg={};
-    for(const k in per){ const r=per[k]; const g=agg[r.track] || (agg[r.track]={s:0,n:0}); g.s+=r.stars; g.n++; }
+    for(const k in per){ const r=per[k]; if(!(r.stars>0)) continue; const g=agg[r.track] || (agg[r.track]={s:0,n:0}); g.s+=r.stars; g.n++; }
     for(const k in agg){ agg[k].a = agg[k].s/agg[k].n; }
     glob=agg; localStorage.setItem(LSG,JSON.stringify(glob)); show(); };
   const sc=document.createElement("script"); sc.id=cb;
@@ -1158,6 +1268,9 @@ function openArtist(t){
   }).join('') || '<p class="pempty">Only this one in the station.</p>';
   body.querySelectorAll(".frow").forEach(r=>{ r.onclick=()=>{ playId(r.dataset.id); refreshRows(); }; });
   { const pa=document.getElementById("arplayall"); if(pa) pa.onclick=()=>{ queue=list.slice(); idx=0; playCurrent(); };
+    const ps=document.getElementById("arshuffle"); if(ps) ps.onclick=()=>{ const s=list.slice();
+      for(let i=s.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); const q=s[i]; s[i]=s[j]; s[j]=q; }
+      queue=s; idx=0; playCurrent(); };
     document.getElementById("artsheet").classList.add("open");
   const ac=document.getElementById("arclose"); if(ac) ac.onclick=()=>document.getElementById("artsheet").classList.remove("open"); }
 }
